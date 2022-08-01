@@ -5,8 +5,8 @@ import shutil
 import cv2
 import math
 from resource.ui_main import Ui_MainWindow
-from PySide2.QtCore import QFile, QObject, QThread, Signal, Qt
-from PySide2.QtGui import QColor, QFont, QIcon, QPixmap
+from PySide2.QtCore import Qt
+from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QApplication, QFileDialog, QMainWindow, QMessageBox, QLabel, QCheckBox, QWidget, QHBoxLayout
 
 # pyside2-uic resource/ui_main.ui -o resource/ui_main.py     --> .ui to .py
@@ -153,15 +153,21 @@ class MainWindow(QMainWindow):
             self.ui.tableWidget.setCellWidget(row, col_checkBox, checkbox_cell_widget)
             self.ui.tableWidget.setCellWidget(row, col_img, img_label_cell_widget)
             self.ui.tableWidget.setRowHeight(row, ROW_HEIGHT)
+            # Check image size
+            img_cv = cv2.imread(self.tmp_images[i])
+            img_cv_height, img_cv_width, _ = img_cv.shape
+            if img_cv_width > img_cv_height:
+                checkbox.setChecked(True)
             QApplication.processEvents()
     
     def to_image(self, files):
+        ext = ".jpg"
         for file in files:
             try:
-                os.rename(file, file + ".png")
+                os.rename(file, file + ext)
             except Exception as e:
                 os.remove(file)
-        return [x + ".png" for x in files]
+        return [x + ext for x in files]
 
     def refresh(self):
         self.remove_tmp_image()
@@ -215,7 +221,6 @@ class ImageCheckBox(QCheckBox):
     def __init__(self, text, parent=None, image_dir=""):
         super().__init__(text, parent)
         self.image_dir = image_dir
-        self.setChecked(True)
 
 
 if __name__ == "__main__":
