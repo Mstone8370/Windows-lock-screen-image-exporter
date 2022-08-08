@@ -5,9 +5,9 @@ import shutil
 import cv2
 import math
 from resource.ui_main import Ui_MainWindow
-from PySide2.QtCore import Qt
-from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QApplication, QFileDialog, QMainWindow, QMessageBox, QLabel, QCheckBox, QWidget, QHBoxLayout
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
 
 # pyside2-uic resource/ui_main.ui -o resource/ui_main.py     --> .ui to .py
 
@@ -23,6 +23,7 @@ class MessageBoxType(enum.Enum):
     WARNING = 4
     CRITICAL = 5
 
+
 # https://stackoverflow.com/a/51061279
 def get_resource_path(relative_path=""):
     """Get absolute path to resource, works for dev and for PyInstaller"""
@@ -34,6 +35,7 @@ def get_resource_path(relative_path=""):
         base_path = os.getcwd()
 
     return os.path.join(base_path, relative_path)
+
 
 def copy_files(files, dst):
     copied_file_dir = []
@@ -49,7 +51,8 @@ def copy_files(files, dst):
             if os.path.isfile(file):
                 os.remove(file)
         return None
-    
+
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -63,9 +66,11 @@ class MainWindow(QMainWindow):
         self.init_widgets()
         self.load_image()
     
+
     def closeEvent(self, event):
         self.remove_tmp_image()
     
+
     def init_variables(self):
         self.resource_dir = get_resource_path()
         self.src_abs_dir = os.path.join(
@@ -86,11 +91,13 @@ class MainWindow(QMainWindow):
         self.checkBoxes = []
         self.tmp_images = []
     
+
     def init_widgets(self):
         self.ui.refresh_pushButton.clicked.connect(self.refresh)
         self.ui.save_pushButton.clicked.connect(self.save_image)
         self.ui.check_all_pushButton.clicked.connect(self.check_all)
         self.ui.uncheck_all_pushButton.clicked.connect(self.uncheck_all)
+
 
     def show_messageBox(self, messageBox_type=MessageBoxType.ABOUT, text="", title=""):
         """Show Message Box"""
@@ -106,7 +113,8 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, title, text, QMessageBox.Ok)
         if messageBox_type == MessageBoxType.CRITICAL:
             QMessageBox.critical(self, title, text, QMessageBox.Ok)
-        
+
+
     def load_image(self):
         """이미지 가져와서 ui에 띄움"""
         file_list = []
@@ -132,7 +140,7 @@ class MainWindow(QMainWindow):
             # Create check box widget
             checkbox = ImageCheckBox("", self, self.tmp_images[i])
             self.checkBoxes.append(checkbox)
-            checkbox_cell_widget = QWidget()
+            checkbox_cell_widget = ClickableWidget(checkbox)
             checkbox_layout = QHBoxLayout(checkbox_cell_widget)
             checkbox_layout.addWidget(checkbox)
             checkbox_layout.setAlignment(Qt.AlignCenter)
@@ -143,7 +151,7 @@ class MainWindow(QMainWindow):
             img = img.scaledToHeight(ROW_HEIGHT)
             img_label = QLabel()
             img_label.setPixmap(img)
-            img_label_cell_widget = QWidget()
+            img_label_cell_widget = ClickableWidget(checkbox)
             img_label_layout = QHBoxLayout(img_label_cell_widget)
             img_label_layout.addWidget(img_label)
             img_label_layout.setAlignment(Qt.AlignCenter)
@@ -160,6 +168,7 @@ class MainWindow(QMainWindow):
                 checkbox.setChecked(True)
             QApplication.processEvents()
     
+
     def to_image(self, files):
         ext = ".jpg"
         for file in files:
@@ -168,6 +177,7 @@ class MainWindow(QMainWindow):
             except Exception as e:
                 os.remove(file)
         return [x + ext for x in files]
+
 
     def refresh(self):
         self.remove_tmp_image()
@@ -178,6 +188,7 @@ class MainWindow(QMainWindow):
         QApplication.processEvents()
         self.load_image()
     
+
     def remove_tmp_image(self):
         for tmp in self.tmp_images:
             try:
@@ -188,6 +199,7 @@ class MainWindow(QMainWindow):
         self.tmp_images = []
         print("temp image removed.")
     
+
     def save_image(self):
         img_to_save = []
         for checkBox in self.checkBoxes:
@@ -208,19 +220,37 @@ class MainWindow(QMainWindow):
                 continue
         self.show_messageBox(MessageBoxType.INFORMATION, text="Image saved.", title=" ")
     
+
     def check_all(self):
         for checkbox in self.checkBoxes:
             checkbox.setChecked(True)
+
 
     def uncheck_all(self):
         for checkbox in self.checkBoxes:
             checkbox.setChecked(False)
 
 
+
 class ImageCheckBox(QCheckBox):
     def __init__(self, text, parent=None, image_dir=""):
         super().__init__(text, parent)
         self.image_dir = image_dir
+
+
+
+class ClickableWidget(QWidget):
+    def __init__(self, checkBox=None):
+        super().__init__()
+        self.linked_checkBox = checkBox
+        self.mousePressEvent = self.toggle_checkBox
+
+
+    def toggle_checkBox(self, event):
+        if self.linked_checkBox == None:
+            return
+        self.linked_checkBox.setChecked(not self.linked_checkBox.isChecked())
+
 
 
 if __name__ == "__main__":
