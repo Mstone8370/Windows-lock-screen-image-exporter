@@ -53,7 +53,6 @@ def copy_files(files, dst):
         return None
 
 
-
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -93,7 +92,6 @@ class MainWindow(QMainWindow):
     
 
     def init_widgets(self):
-        self.ui.refresh_pushButton.clicked.connect(self.refresh)
         self.ui.save_pushButton.clicked.connect(self.save_image)
         self.ui.check_all_pushButton.clicked.connect(self.check_all)
         self.ui.uncheck_all_pushButton.clicked.connect(self.uncheck_all)
@@ -177,16 +175,6 @@ class MainWindow(QMainWindow):
             except Exception as e:
                 os.remove(file)
         return [x + ext for x in files]
-
-
-    def refresh(self):
-        self.remove_tmp_image()
-        self.checkBoxes = []
-        # Remove all rows from tableWidget
-        while self.ui.tableWidget.rowCount() > 0:
-            self.ui.tableWidget.removeRow(0);
-        QApplication.processEvents()
-        self.load_image()
     
 
     def remove_tmp_image(self):

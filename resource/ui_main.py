@@ -22,26 +22,28 @@ class Ui_MainWindow(object):
         MainWindow.setMaximumSize(QSize(600, 700))
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayoutWidget = QWidget(self.centralwidget)
-        self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
-        self.verticalLayoutWidget.setGeometry(QRect(9, 9, 581, 681))
-        self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout_2 = QVBoxLayout(self.centralwidget)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.refresh_pushButton = QPushButton(self.verticalLayoutWidget)
-        self.refresh_pushButton.setObjectName(u"refresh_pushButton")
-        self.refresh_pushButton.setMinimumSize(QSize(0, 70))
-        font = QFont()
-        font.setPointSize(12)
-        self.refresh_pushButton.setFont(font)
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.check_all_pushButton = QPushButton(self.centralwidget)
+        self.check_all_pushButton.setObjectName(u"check_all_pushButton")
+        self.check_all_pushButton.setMinimumSize(QSize(0, 30))
 
-        self.verticalLayout.addWidget(self.refresh_pushButton)
+        self.horizontalLayout.addWidget(self.check_all_pushButton)
 
-        self.verticalSpacer = QSpacerItem(20, 5, QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.uncheck_all_pushButton = QPushButton(self.centralwidget)
+        self.uncheck_all_pushButton.setObjectName(u"uncheck_all_pushButton")
+        self.uncheck_all_pushButton.setMinimumSize(QSize(0, 30))
 
-        self.verticalLayout.addItem(self.verticalSpacer)
+        self.horizontalLayout.addWidget(self.uncheck_all_pushButton)
 
-        self.tableWidget = QTableWidget(self.verticalLayoutWidget)
+
+        self.verticalLayout.addLayout(self.horizontalLayout)
+
+        self.tableWidget = QTableWidget(self.centralwidget)
         self.tableWidget.setObjectName(u"tableWidget")
         self.tableWidget.setSelectionMode(QAbstractItemView.NoSelection)
         self.tableWidget.setCornerButtonEnabled(False)
@@ -52,31 +54,17 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.tableWidget)
 
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.check_all_pushButton = QPushButton(self.verticalLayoutWidget)
-        self.check_all_pushButton.setObjectName(u"check_all_pushButton")
-        self.check_all_pushButton.setMinimumSize(QSize(0, 30))
-
-        self.horizontalLayout.addWidget(self.check_all_pushButton)
-
-        self.uncheck_all_pushButton = QPushButton(self.verticalLayoutWidget)
-        self.uncheck_all_pushButton.setObjectName(u"uncheck_all_pushButton")
-        self.uncheck_all_pushButton.setMinimumSize(QSize(0, 30))
-
-        self.horizontalLayout.addWidget(self.uncheck_all_pushButton)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout)
-
-        self.save_pushButton = QPushButton(self.verticalLayoutWidget)
+        self.save_pushButton = QPushButton(self.centralwidget)
         self.save_pushButton.setObjectName(u"save_pushButton")
         self.save_pushButton.setMinimumSize(QSize(0, 50))
-        font1 = QFont()
-        font1.setPointSize(10)
-        self.save_pushButton.setFont(font1)
+        font = QFont()
+        font.setPointSize(10)
+        self.save_pushButton.setFont(font)
 
         self.verticalLayout.addWidget(self.save_pushButton)
+
+
+        self.verticalLayout_2.addLayout(self.verticalLayout)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -87,9 +75,8 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.refresh_pushButton.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
         self.check_all_pushButton.setText(QCoreApplication.translate("MainWindow", u"Check all", None))
         self.uncheck_all_pushButton.setText(QCoreApplication.translate("MainWindow", u"Uncheck all", None))
-        self.save_pushButton.setText(QCoreApplication.translate("MainWindow", u"Save image", None))
+        self.save_pushButton.setText(QCoreApplication.translate("MainWindow", u"Save selected images", None))
     # retranslateUi
 
